@@ -1,0 +1,19 @@
+---
+openapi: 3.0.3
+info:
+  title: drk-storage
+  description: API for storing drawing data
+  version: 0.0.1
+servers:
+  - url: http://localhost:8082
+    description: Inferred URL
+tags:
+  - name: Document Controller
+    description: Document controller
+  - name: Document Details Controller
+    description: Document Details controller
+  - name: Iteration Controller
+    description: Iteration controller
+  - name: File Controller
+    description: File controller
+paths:
