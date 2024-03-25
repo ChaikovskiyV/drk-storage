@@ -17,3 +17,75 @@ tags:
   - name: File Controller
     description: File controller
 paths:
+  '/documents':
+    get:
+      tags:
+        - Document Controller
+      summary: Get all documents
+      operationId: getDocumentsUsingGET
+      responses:
+        '200':
+          description: There is OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Documents'
+components:
+  schemas:
+    Documents:
+      title: Documents
+      type: array
+      items:
+        $ref: '#/components/schemas/Document'
+    Document:
+      title: Document
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        article:
+          type: string
+        customer:
+          $ref: '#/components/schemas/Customer'
+        department:
+          $ref: '#/components/schemas/Department'
+        iteration:
+          $ref: '#/components/schemas/Iteration'
+        partOf:
+          type: string
+          format: uuid
+    Customer:
+      title: Customer
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    Department:
+      title: Department
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    Iteration:
+      title: Iteration
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        number:
+          type: integer
+          format: int64
+        reason:
+          type: string
+        description:
+          type: string
