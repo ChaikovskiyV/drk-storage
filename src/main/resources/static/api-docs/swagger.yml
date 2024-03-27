@@ -35,8 +35,74 @@ paths:
       security:
         - Authorization:
             - global
+  '/documents/{id}':
+    post:
+      tags:
+        - Document Controller
+      summary: Update document
+      operationId: updateDocumentUsingPUT
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentRequest'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+    get:
+      tags:
+        - Document Controller
+      summary: Get document by id
+      operationId: getDocumentusingGET
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Document'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
 components:
+  parameters:
+    id:
+      name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: e1234567-e89b-12d3-a456-426614174015
   responses:
+    BadReqError:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ForbiddenError:
+      description: The access is forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     UnauthorizedError:
       description: Access token is missing or invalid
       content:
@@ -87,6 +153,21 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Document'
+    DocumentRequest:
+      title: DocumentRequest
+      type: object
+      properties:
+        name:
+          type: string
+        article:
+          type: string
+        customerName:
+          type: string
+        iterationRequest:
+          $ref: '#/components/schemas/IterationRequest'
+        partOf:
+          type: string
+          format: uuid
     ErrorResponse:
       title: ErrorResponse
       type: object
@@ -173,6 +254,18 @@ components:
       type: object
       additionalProperties:
         $ref: '#/components/schemas/File'
+    IterationRequest:
+      title: IterationRequest
+      type: object
+      properties:
+        reason:
+          type: string
+        description:
+          type: string
+        verifier:
+          $ref: '#/components/schemas/User'
+        iterationPayload:
+          $ref: '#/components/schemas/IterationPayload'
     User:
       title: User
       type: object
