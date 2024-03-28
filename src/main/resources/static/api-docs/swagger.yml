@@ -35,8 +35,31 @@ paths:
       security:
         - Authorization:
             - global
-  '/documents/{id}':
     post:
+      tags:
+        - Document Controller
+      summary: Create document
+      operationId: createDocumentUsingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentRequest'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+  '/documents/{id}':
+    put:
       tags:
         - Document Controller
       summary: Update document
@@ -79,12 +102,63 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+  '/documentDetails/{documentId}':
+    get:
+      tags:
+        - DocumentDetails Controller
+      summary: Get document details by document id
+      operationId: getDocumentDetailsUsingGET
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DocumentDetails'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+    put:
+      tags:
+        - DocumentDetails Controller
+      summary: Update document details by document id
+      operationId: updateDocumentDetailsUsingPUT
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentDetailsRequest'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DocumentDetails'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
 components:
   parameters:
     id:
       name: id
       in: path
       description: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: e1234567-e89b-12d3-a456-426614174015
+    documentId:
+      name: documentId
+      in: path
+      description: document id
       required: true
       schema:
         type: string
@@ -139,8 +213,8 @@ components:
           type: string
         article:
           type: string
-        customer:
-          $ref: '#/components/schemas/Customer'
+        requirement:
+          $ref: '#/components/schemas/DocumentDetails'
         department:
           $ref: '#/components/schemas/Department'
         iteration:
@@ -148,6 +222,20 @@ components:
         partOf:
           type: string
           format: uuid
+          nullable: true
+    DocumentDetails:
+      title: DocumentDetails
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customer:
+          $ref: '#/components/schemas/Customer'
+        requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
     Documents:
       title: Documents
       type: array
@@ -163,11 +251,26 @@ components:
           type: string
         customerName:
           type: string
+        requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
         iterationRequest:
           $ref: '#/components/schemas/IterationRequest'
         partOf:
           type: string
           format: uuid
+          nullable: true
+    DocumentDetailsRequest:
+      title: DocumentDetailsRequest
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+        requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
     ErrorResponse:
       title: ErrorResponse
       type: object
@@ -213,7 +316,6 @@ components:
             - MODEL
             - CAST_DRAWING
             - CAST_MODEL
-            - TECH_REQ
             - NOTE
         uploadDate:
           type: string
