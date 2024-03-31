@@ -202,6 +202,20 @@ paths:
       operationId: getIterationsUsingGET
       parameters:
         - $ref: '#/components/parameters/documentId'
+        - name: before
+          in: query
+          description: timestamp in seconds
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: after
+          in: query
+          description: timestamp in seconds
+          required: false
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: This is an OK  response
