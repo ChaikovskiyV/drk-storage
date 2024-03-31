@@ -141,7 +141,7 @@ paths:
   '/documentDetails/{documentId}':
     get:
       tags:
-        - DocumentDetails Controller
+        - Document Details Controller
       summary: Get document details by document id
       operationId: getDocumentDetailsUsingGET
       parameters:
@@ -166,7 +166,7 @@ paths:
             - global
     put:
       tags:
-        - DocumentDetails Controller
+        - Document Details Controller
       summary: Update document details by document id
       operationId: updateDocumentDetailsUsingPUT
       parameters:
@@ -198,7 +198,7 @@ paths:
     get:
       tags:
         - Iteration Controller
-      summary: get all iterations by document id
+      summary: Get all iterations by document id
       operationId: getIterationsUsingGET
       parameters:
         - $ref: '#/components/parameters/documentId'
@@ -223,7 +223,7 @@ paths:
     post:
       tags:
         - Iteration Controller
-      summary: create new iteration for document with provided id
+      summary: Create new iteration of the document
       operationId: createIterationUsingPOST
       parameters:
         - $ref: '#/components/parameters/documentId'
