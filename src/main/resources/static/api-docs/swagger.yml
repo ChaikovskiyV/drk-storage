@@ -144,6 +144,120 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+  '/iterations/{documentId}':
+    get:
+      tags:
+        - Iteration Controller
+      summary: get all iterations by document id
+      operationId: getIterationsUsingGET
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+      responses:
+        '200':
+          description: This is an OK  response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Iterations'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+    post:
+      tags:
+        - Iteration Controller
+      summary: create new iteration for document with provided id
+      operationId: createIterationUsingPOST
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IterationRequest'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Iteration'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+  '/iterations/{documentId}/{id}':
+    get:
+      tags:
+        - Iteration Controller
+      summary: Get iteration by provided id of document with provided id
+      operationId: getIterationByIdUsingGET
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Iteration'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+    put:
+      tags:
+        - Iteration Controller
+      summary: Update iteration of document with provided id
+      operationId: updateIteration
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IterationRequest'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Iteration'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
 components:
   parameters:
     id:
@@ -173,6 +287,12 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     ForbiddenError:
       description: The access is forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFoundError:
+      description: The data is not found by provided parameters
       content:
         application/json:
           schema:
@@ -213,7 +333,7 @@ components:
           type: string
         article:
           type: string
-        requirement:
+        requirementDetails:
           $ref: '#/components/schemas/DocumentDetails'
         department:
           $ref: '#/components/schemas/Department'
@@ -368,6 +488,11 @@ components:
           $ref: '#/components/schemas/User'
         iterationPayload:
           $ref: '#/components/schemas/IterationPayload'
+    Iterations:
+      title: Iterations
+      type: array
+      items:
+        $ref: '#/components/schemas/Iteration'
     User:
       title: User
       type: object
