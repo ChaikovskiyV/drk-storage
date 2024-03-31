@@ -23,6 +23,27 @@ paths:
         - Document Controller
       summary: Get all documents
       operationId: getDocumentsUsingGET
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: article
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: customer
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: department
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: There is OK response
