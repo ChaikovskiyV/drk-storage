@@ -58,6 +58,9 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+      security:
+        - Authorization:
+            - global
   '/documents/{id}':
     put:
       tags:
@@ -84,6 +87,11 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
     get:
       tags:
         - Document Controller
@@ -98,10 +106,17 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/BadReqError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
   '/documentDetails/{documentId}':
     get:
       tags:
@@ -117,10 +132,17 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/DocumentDetails'
+        '400':
+          $ref: '#/components/responses/BadReqError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
     put:
       tags:
         - DocumentDetails Controller
@@ -140,10 +162,17 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/DocumentDetails'
+        '400':
+          $ref: '#/components/responses/BadReqError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
   '/iterations/{documentId}':
     get:
       tags:
