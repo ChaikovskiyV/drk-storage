@@ -258,12 +258,59 @@ paths:
       security:
         - Authorization:
             - global
+  '/files/{documentId}/{iterationId}':
+    get:
+      tags:
+        - File Controller
+      summary: Get files of document with documentId and iterationId
+      operationId: getFilesUsingGET
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+        - $ref: '#/components/parameters/iterationId'
+        - name: type
+          in: query
+          description: type of file
+          required: false
+          schema:
+            type: string
+            enum:
+              - PDF
+              - STEP
+              - DRAWING
+              - MODEL
+              - CAST_DRAWING
+              - CAST_MODEL
+              - NOTE
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Files'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
 components:
   parameters:
     id:
       name: id
       in: path
       description: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: e1234567-e89b-12d3-a456-426614174015
+    iterationId:
+      name: iterationId
+      in: path
+      description: document id
       required: true
       schema:
         type: string
@@ -443,6 +490,11 @@ components:
         payload:
           type: string
           format: byte
+    Files:
+      title: Files
+      type: array
+      items:
+        $ref: '#/components/schemas/File'
     InnerError:
       title: InnerError
       type: object
