@@ -630,3 +630,8 @@ components:
             - USER
         department:
           $ref: '#/components/schemas/Department'
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header
