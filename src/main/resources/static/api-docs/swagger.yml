@@ -1,0 +1,782 @@
+---
+openapi: 3.0.3
+info:
+  title: drk-storage
+  description: API for storing drawing data
+  version: 0.0.1
+servers:
+  - url: http://localhost:8082
+    description: Inferred URL
+tags:
+  - name: Document Controller
+    description: Document controller
+  - name: Document Details Controller
+    description: Document Details controller
+  - name: Iteration Controller
+    description: Iteration controller
+  - name: File Controller
+    description: File controller
+paths:
+  '/documents':
+    get:
+      tags:
+        - Document Controller
+      summary: Get all documents
+      operationId: getDocumentsUsingGET
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: article
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: customer
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: department
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/paged'
+        - $ref: '#/components/parameters/unpaged'
+        - $ref: '#/components/parameters/sorted'
+        - $ref: '#/components/parameters/unsorted'
+      responses:
+        '200':
+          description: There is OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageDocuments'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - Authorization:
+            - global
+    post:
+      tags:
+        - Document Controller
+      summary: Create document
+      operationId: createDocumentUsingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentRequest'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+      security:
+        - Authorization:
+            - global
+  '/documents/{id}':
+    put:
+      tags:
+        - Document Controller
+      summary: Update document
+      operationId: updateDocumentUsingPUT
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentRequest'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+    get:
+      tags:
+        - Document Controller
+      summary: Get document by id
+      operationId: getDocumentusingGET
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+  '/documentDetails/{documentId}':
+    get:
+      tags:
+        - Document Details Controller
+      summary: Get document details by document id
+      operationId: getDocumentDetailsUsingGET
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DocumentDetails'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+    put:
+      tags:
+        - Document Details Controller
+      summary: Update document details by document id
+      operationId: updateDocumentDetailsUsingPUT
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentDetailsRequest'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DocumentDetails'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+  '/iterations/{documentId}':
+    get:
+      tags:
+        - Iteration Controller
+      summary: Get all iterations by document id
+      operationId: getIterationsUsingGET
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+        - name: before
+          in: query
+          description: timestamp in seconds
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: after
+          in: query
+          description: timestamp in seconds
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/paged'
+        - $ref: '#/components/parameters/unpaged'
+        - $ref: '#/components/parameters/sorted'
+        - $ref: '#/components/parameters/unsorted'
+      responses:
+        '200':
+          description: This is an OK  response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageIterations'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+    post:
+      tags:
+        - Iteration Controller
+      summary: Create new iteration of the document
+      operationId: createIterationUsingPOST
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IterationRequest'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Iteration'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+  '/iterations/{documentId}/{id}':
+    get:
+      tags:
+        - Iteration Controller
+      summary: Get iteration by provided id of document with provided id
+      operationId: getIterationByIdUsingGET
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Iteration'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+    put:
+      tags:
+        - Iteration Controller
+      summary: Update iteration of document with provided id
+      operationId: updateIteration
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IterationRequest'
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Iteration'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - Authorization:
+            - global
+  '/files/{documentId}/{iterationId}':
+    get:
+      tags:
+        - File Controller
+      summary: Get files of document with documentId and iterationId
+      operationId: getFilesUsingGET
+      parameters:
+        - $ref: '#/components/parameters/documentId'
+        - $ref: '#/components/parameters/iterationId'
+        - name: type
+          in: query
+          description: type of file
+          required: false
+          schema:
+            type: string
+            enum:
+              - PDF
+              - STEP
+              - DRAWING
+              - MODEL
+              - CAST_DRAWING
+              - CAST_MODEL
+              - NOTE
+      responses:
+        '200':
+          description: This is an OK response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Files'
+        '400':
+          $ref: '#/components/responses/BadReqError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: e1234567-e89b-12d3-a456-426614174015
+    documentId:
+      name: documentId
+      in: path
+      description: document id
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: e1234567-e89b-12d3-a456-426614174015
+    iterationId:
+      name: iterationId
+      in: path
+      description: document id
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: e1234567-e89b-12d3-a456-426614174015
+    offset:
+      name: offset
+      in: query
+      required: false
+      style: form
+      schema:
+        type: integer
+        format: int64
+    pageNumber:
+      name: pageNumber
+      in: query
+      required: false
+      style: form
+      schema:
+        type: integer
+        format: int32
+    pageSize:
+      name: pageSize
+      in: query
+      required: false
+      style: form
+      schema:
+        type: integer
+        format: int32
+    paged:
+      name: paged
+      in: query
+      required: false
+      style: form
+      schema:
+        type: boolean
+    unpaged:
+      name: unpaged
+      in: query
+      required: false
+      style: form
+      schema:
+        type: boolean
+    sorted:
+      name: sort.sorted
+      in: query
+      required: false
+      style: form
+      schema:
+        type: boolean
+    unsorted:
+      name: sort.unsorted
+      in: query
+      required: false
+      style: form
+      schema:
+        type: boolean
+  responses:
+    BadReqError:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ForbiddenError:
+      description: The access is forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFoundError:
+      description: The data is not found by provided parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    Customer:
+      title: Customer
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    Department:
+      title: Department
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    Document:
+      title: Document
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        article:
+          type: string
+        requirementDetails:
+          $ref: '#/components/schemas/DocumentDetails'
+        department:
+          $ref: '#/components/schemas/Department'
+        iteration:
+          $ref: '#/components/schemas/Iteration'
+        partOf:
+          type: string
+          format: uuid
+          nullable: true
+    DocumentDetails:
+      title: DocumentDetails
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customer:
+          $ref: '#/components/schemas/Customer'
+        requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    DocumentRequest:
+      title: DocumentRequest
+      type: object
+      properties:
+        name:
+          type: string
+        article:
+          type: string
+        customerName:
+          type: string
+        requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        iterationRequest:
+          $ref: '#/components/schemas/IterationRequest'
+        partOf:
+          type: string
+          format: uuid
+          nullable: true
+    DocumentDetailsRequest:
+      title: DocumentDetailsRequest
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+        requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    ErrorResponse:
+      title: ErrorResponse
+      type: object
+      properties:
+        cause:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/InnerError'
+        i18nKey:
+          type: string
+        message:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: object
+        timestamp:
+          type: string
+          format: date-time
+        type:
+          type: string
+          enum:
+            - SERVER
+            - SECURITY
+            - VALIDATION
+            - REQUEST
+            - AUTHENTICATION
+    File:
+      title: File
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - PDF
+            - STEP
+            - DRAWING
+            - MODEL
+            - CAST_DRAWING
+            - CAST_MODEL
+            - NOTE
+        uploadDate:
+          type: string
+          format: date-time
+        payload:
+          type: string
+          format: byte
+    Files:
+      title: Files
+      type: array
+      items:
+        $ref: '#/components/schemas/File'
+    InnerError:
+      title: InnerError
+      type: object
+      properties:
+        target:
+          type: string
+        message:
+          type: string
+    Iteration:
+      title: Iteration
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        number:
+          type: integer
+          format: int64
+        reason:
+          type: string
+        description:
+          type: string
+        creator:
+          $ref: '#/components/schemas/User'
+        verifier:
+          $ref: '#/components/schemas/User'
+        iterationPayload:
+          $ref: '#/components/schemas/IterationPayload'
+    IterationPayload:
+      title: IterationPayload
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/File'
+    IterationRequest:
+      title: IterationRequest
+      type: object
+      properties:
+        reason:
+          type: string
+        description:
+          type: string
+        verifier:
+          $ref: '#/components/schemas/User'
+        iterationPayload:
+          $ref: '#/components/schemas/IterationPayload'
+    Pageable:
+      title: Pageable
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        sort:
+          $ref: '#/components/schemas/Sort'
+    PageDocuments:
+      title: PageDocuments
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        empty:
+          type: boolean
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        size:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        totalElement:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    PageIterations:
+      title: PageIterations
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Iteration'
+        empty:
+          type: boolean
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        size:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        totalElement:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    Sort:
+      title: Sort
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum:
+            - ADMIN
+            - DEV
+            - USER
+        department:
+          $ref: '#/components/schemas/Department'
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header
