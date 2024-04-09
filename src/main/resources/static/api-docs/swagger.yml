@@ -44,13 +44,20 @@ paths:
           required: false
           schema:
             type: string
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/paged'
+        - $ref: '#/components/parameters/unpaged'
+        - $ref: '#/components/parameters/sorted'
+        - $ref: '#/components/parameters/unsorted'
       responses:
         '200':
           description: There is OK response
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Documents'
+                $ref: '#/components/schemas/PageDocuments'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
       security:
@@ -216,13 +223,20 @@ paths:
           schema:
             type: integer
             format: int64
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/paged'
+        - $ref: '#/components/parameters/unpaged'
+        - $ref: '#/components/parameters/sorted'
+        - $ref: '#/components/parameters/unsorted'
       responses:
         '200':
           description: This is an OK  response
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Iterations'
+                $ref: '#/components/schemas/PageIterations'
         '400':
           $ref: '#/components/responses/BadReqError'
         '401':
@@ -371,15 +385,6 @@ components:
         type: string
         format: uuid
         example: e1234567-e89b-12d3-a456-426614174015
-    iterationId:
-      name: iterationId
-      in: path
-      description: document id
-      required: true
-      schema:
-        type: string
-        format: uuid
-        example: e1234567-e89b-12d3-a456-426614174015
     documentId:
       name: documentId
       in: path
@@ -389,6 +394,67 @@ components:
         type: string
         format: uuid
         example: e1234567-e89b-12d3-a456-426614174015
+    iterationId:
+      name: iterationId
+      in: path
+      description: document id
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: e1234567-e89b-12d3-a456-426614174015
+    offset:
+      name: offset
+      in: query
+      required: false
+      style: form
+      schema:
+        type: integer
+        format: int64
+    pageNumber:
+      name: pageNumber
+      in: query
+      required: false
+      style: form
+      schema:
+        type: integer
+        format: int32
+    pageSize:
+      name: pageSize
+      in: query
+      required: false
+      style: form
+      schema:
+        type: integer
+        format: int32
+    paged:
+      name: paged
+      in: query
+      required: false
+      style: form
+      schema:
+        type: boolean
+    unpaged:
+      name: unpaged
+      in: query
+      required: false
+      style: form
+      schema:
+        type: boolean
+    sorted:
+      name: sort.sorted
+      in: query
+      required: false
+      style: form
+      schema:
+        type: boolean
+    unsorted:
+      name: sort.unsorted
+      in: query
+      required: false
+      style: form
+      schema:
+        type: boolean
   responses:
     BadReqError:
       description: Bad request
@@ -467,11 +533,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/File'
-    Documents:
-      title: Documents
-      type: array
-      items:
-        $ref: '#/components/schemas/Document'
     DocumentRequest:
       title: DocumentRequest
       type: object
@@ -604,11 +665,95 @@ components:
           $ref: '#/components/schemas/User'
         iterationPayload:
           $ref: '#/components/schemas/IterationPayload'
-    Iterations:
-      title: Iterations
-      type: array
-      items:
-        $ref: '#/components/schemas/Iteration'
+    Pageable:
+      title: Pageable
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        sort:
+          $ref: '#/components/schemas/Sort'
+    PageDocuments:
+      title: PageDocuments
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        empty:
+          type: boolean
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        size:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        totalElement:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    PageIterations:
+      title: PageIterations
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Iteration'
+        empty:
+          type: boolean
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        size:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        totalElement:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    Sort:
+      title: Sort
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
     User:
       title: User
       type: object
