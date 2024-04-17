@@ -510,12 +510,17 @@ components:
           type: string
         article:
           type: string
+        createdDate:
+          type: integer
+          format: int64
         requirementDetails:
           $ref: '#/components/schemas/DocumentDetails'
         department:
           $ref: '#/components/schemas/Department'
-        iteration:
-          $ref: '#/components/schemas/Iteration'
+        description:
+          type: string
+        files:
+          $ref: '#/components/schemas/Files'
         partOf:
           type: string
           format: uuid
@@ -529,6 +534,8 @@ components:
           format: uuid
         customer:
           $ref: '#/components/schemas/Customer'
+        description:
+          type: string
         requirements:
           type: array
           items:
@@ -609,6 +616,8 @@ components:
             - CAST_DRAWING
             - CAST_MODEL
             - NOTE
+        iteration:
+          $ref: '#/components/schemas/Iteration'
         uploadDate:
           type: string
           format: date-time
@@ -646,13 +655,11 @@ components:
           $ref: '#/components/schemas/User'
         verifier:
           $ref: '#/components/schemas/User'
-        iterationPayload:
-          $ref: '#/components/schemas/IterationPayload'
-    IterationPayload:
-      title: IterationPayload
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/File'
+        files:
+          $ref: '#/components/schemas/Files'
+        createdDate:
+          type: integer
+          format: int64
     IterationRequest:
       title: IterationRequest
       type: object
@@ -663,8 +670,8 @@ components:
           type: string
         verifier:
           $ref: '#/components/schemas/User'
-        iterationPayload:
-          $ref: '#/components/schemas/IterationPayload'
+        files:
+          $ref: '#/components/schemas/Files'
     Pageable:
       title: Pageable
       type: object
@@ -761,7 +768,7 @@ components:
         id:
           type: string
           format: uuid
-        name:
+        firstname:
           type: string
         lastname:
           type: string
