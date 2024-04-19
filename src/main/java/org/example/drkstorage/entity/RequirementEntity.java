@@ -24,5 +24,6 @@ public class RequirementEntity implements AbstractEntity {
   @ManyToOne
   private DocumentEntity document;
   @ManyToOne
+  @JoinColumn(name = "customer_id")
   private CustomerEntity customer;
 }
