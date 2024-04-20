@@ -1,6 +1,9 @@
 package org.example.drkstorage.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -9,10 +12,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 @Data
@@ -20,12 +25,18 @@ import lombok.experimental.Accessors;
 @Table(name = "files")
 public class FileEntity {
   @Id
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator",
+      parameters = @Parameter(
+          name = "uuid_gen_strategy_class",
+          value = "org.hibernate.id.uuid.CustomVersionOneStrategy"))
   private UUID id;
   private FileType fileType;
   private Instant uploadDate;
   private byte[] payload;
 
-  @OneToOne(mappedBy = "file")
+  @JsonIgnore
+  @OneToOne(mappedBy = "file", fetch = FetchType.LAZY)
   private RequirementEntity requirement;
 
   @ManyToOne
@@ -37,5 +48,5 @@ public class FileEntity {
       name = "files_iterations",
       joinColumns = @JoinColumn(name = "file_id"),
       inverseJoinColumns = @JoinColumn(name = "iteration_id"))
-  private List<IterationEntity> iterations;
+  private Set<IterationEntity> iterations;
 }
