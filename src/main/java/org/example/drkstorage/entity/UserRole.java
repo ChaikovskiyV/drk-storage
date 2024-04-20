@@ -1,6 +1,6 @@
 package org.example.drkstorage.entity;
 
-public enum Role {
+public enum UserRole {
   ADMIN,
   DEV,
   USER
