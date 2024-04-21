@@ -10,8 +10,8 @@ servers:
 tags:
   - name: Document Controller
     description: Document controller
-  - name: Document Details Controller
-    description: Document Details controller
+  - name: Requirement Details Controller
+    description: Requirement Details controller
   - name: Iteration Controller
     description: Iteration controller
   - name: File Controller
@@ -145,12 +145,12 @@ paths:
       security:
         - Authorization:
             - global
-  '/documentDetails/{documentId}':
+  '/requirementDetails/{documentId}':
     get:
       tags:
-        - Document Details Controller
-      summary: Get document details by document id
-      operationId: getDocumentDetailsUsingGET
+        - Requirement Details Controller
+      summary: Get requirement details by document id
+      operationId: getRequirementDetailsUsingGET
       parameters:
         - $ref: '#/components/parameters/documentId'
       responses:
@@ -159,7 +159,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/DocumentDetails'
+                $ref: '#/components/schemas/RequirementDetails'
         '400':
           $ref: '#/components/responses/BadReqError'
         '401':
@@ -173,23 +173,23 @@ paths:
             - global
     put:
       tags:
-        - Document Details Controller
-      summary: Update document details by document id
-      operationId: updateDocumentDetailsUsingPUT
+        - Requirement Details Controller
+      summary: Update requirement details by document id
+      operationId: updateRequirementDetailsUsingPUT
       parameters:
         - $ref: '#/components/parameters/documentId'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DocumentDetailsRequest'
+              $ref: '#/components/schemas/RequirementDetailsRequest'
       responses:
         '200':
           description: This is an OK response
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/DocumentDetails'
+                $ref: '#/components/schemas/RequirementDetails'
         '400':
           $ref: '#/components/responses/BadReqError'
         '401':
@@ -499,6 +499,23 @@ components:
           format: uuid
         name:
           type: string
+    Developer:
+      title: Developer
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user:
+          $ref: '#/components/schemas/User'
+        role:
+          type: string
+          enum:
+            - CREATOR
+            - VERIFIER
+            - NORM_CONTROLLER
+            - DEPARTMENT_HEAD
+            - APPROVER
     Document:
       title: Document
       type: object
@@ -510,36 +527,19 @@ components:
           type: string
         article:
           type: string
+        description:
+          type: string
         createdDate:
           type: integer
           format: int64
-        requirementDetails:
-          $ref: '#/components/schemas/DocumentDetails'
-        department:
-          $ref: '#/components/schemas/Department'
-        description:
-          type: string
+        requirements:
+          $ref: '#/components/schemas/RequirementDetails'
         files:
           $ref: '#/components/schemas/Files'
         partOf:
           type: string
           format: uuid
           nullable: true
-    DocumentDetails:
-      title: DocumentDetails
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        customer:
-          $ref: '#/components/schemas/Customer'
-        description:
-          type: string
-        requirements:
-          type: array
-          items:
-            $ref: '#/components/schemas/File'
     DocumentRequest:
       title: DocumentRequest
       type: object
@@ -560,16 +560,6 @@ components:
           type: string
           format: uuid
           nullable: true
-    DocumentDetailsRequest:
-      title: DocumentDetailsRequest
-      type: object
-      properties:
-        customer:
-          $ref: '#/components/schemas/Customer'
-        requirements:
-          type: array
-          items:
-            $ref: '#/components/schemas/File'
     ErrorResponse:
       title: ErrorResponse
       type: object
@@ -606,6 +596,8 @@ components:
         id:
           type: string
           format: uuid
+        name:
+          type: string
         type:
           type: string
           enum:
@@ -651,10 +643,10 @@ components:
           type: string
         description:
           type: string
-        creator:
-          $ref: '#/components/schemas/User'
-        verifier:
-          $ref: '#/components/schemas/User'
+        developers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Developer'
         files:
           $ref: '#/components/schemas/Files'
         createdDate:
@@ -668,8 +660,10 @@ components:
           type: string
         description:
           type: string
-        verifier:
-          $ref: '#/components/schemas/User'
+        developers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Developer'
         files:
           $ref: '#/components/schemas/Files'
     Pageable:
@@ -751,6 +745,31 @@ components:
         totalPages:
           type: integer
           format: int32
+    RequirementDetails:
+      title: RequirementDetails
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customer:
+          $ref: '#/components/schemas/Customer'
+        description:
+          type: string
+        requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+    RequirementDetailsRequest:
+      title: RequirementDetailsRequest
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+        requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
     Sort:
       title: Sort
       type: object
