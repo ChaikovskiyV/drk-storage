@@ -646,7 +646,7 @@ components:
         developers:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: '#/components/schemas/Developer'
         files:
           $ref: '#/components/schemas/Files'
         createdDate:
@@ -660,8 +660,10 @@ components:
           type: string
         description:
           type: string
-        verifier:
-          $ref: '#/components/schemas/User'
+        developers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Developer'
         files:
           $ref: '#/components/schemas/Files'
     Pageable:
