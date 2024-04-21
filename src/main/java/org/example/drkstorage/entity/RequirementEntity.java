@@ -1,5 +1,6 @@
 package org.example.drkstorage.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -9,6 +10,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -17,6 +19,7 @@ import org.hibernate.annotations.Parameter;
 @Data
 @Accessors(chain = true)
 @Table(name = "requirements")
+@ToString(exclude = "document")
 public class RequirementEntity implements AbstractEntity {
   @Id
   @GeneratedValue(generator = "uuid")
@@ -31,6 +34,7 @@ public class RequirementEntity implements AbstractEntity {
   @JoinColumn(name = "file_id")
   private FileEntity file;
 
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "document_id")
   private DocumentEntity document;

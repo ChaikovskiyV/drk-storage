@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -18,6 +19,7 @@ import org.hibernate.annotations.Parameter;
 @Data
 @Accessors(chain = true)
 @Table(name = "departments")
+@ToString(exclude = "users")
 public class DepartmentEntity implements AbstractEntity {
   @Id
   @GeneratedValue(generator = "uuid")

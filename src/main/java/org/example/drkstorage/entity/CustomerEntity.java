@@ -19,7 +19,7 @@ import org.hibernate.annotations.Parameter;
 @Data
 @Accessors(chain = true)
 @Table(name = "customers")
-@ToString(exclude = "documents")
+@ToString(exclude = "requirements")
 public class CustomerEntity implements AbstractEntity {
   @Id
   @GeneratedValue(generator = "uuid")

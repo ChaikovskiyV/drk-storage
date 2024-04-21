@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -21,6 +22,7 @@ import org.hibernate.annotations.Parameter;
 @Data
 @Table(name = "users")
 @Accessors(chain = true)
+@ToString(exclude = {"password", "developers"})
 public class UserEntity implements AbstractEntity {
   @Id
   @GeneratedValue(generator = "uuid")
@@ -36,7 +38,7 @@ public class UserEntity implements AbstractEntity {
   private String password;
   private UserRole role;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "department_id")
   private DepartmentEntity department;
 

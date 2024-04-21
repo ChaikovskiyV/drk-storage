@@ -1,8 +1,8 @@
 package org.example.drkstorage.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.Parameter;
 @Data
 @Accessors(chain = true)
 @Table(name = "iterations")
+@ToString(exclude = "files")
 public class IterationEntity implements AbstractEntity {
   @Id
   @GeneratedValue(generator = "uuid")
@@ -32,6 +34,7 @@ public class IterationEntity implements AbstractEntity {
   private String reason;
   private String description;
 
+  @JsonIgnore
   @ManyToMany(mappedBy = "iteration", cascade = {
       CascadeType.DETACH,
       CascadeType.MERGE,

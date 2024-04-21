@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -23,6 +24,7 @@ import org.hibernate.annotations.Parameter;
 @Data
 @Accessors(chain = true)
 @Table(name = "files")
+@ToString(exclude = {"requirement", "document"})
 public class FileEntity {
   @Id
   @GeneratedValue(generator = "uuid")
@@ -31,6 +33,7 @@ public class FileEntity {
           name = "uuid_gen_strategy_class",
           value = "org.hibernate.id.uuid.CustomVersionOneStrategy"))
   private UUID id;
+  private String name;
   private FileType fileType;
   private Instant uploadDate;
   private byte[] payload;
@@ -39,6 +42,7 @@ public class FileEntity {
   @OneToOne(mappedBy = "file", fetch = FetchType.LAZY)
   private RequirementEntity requirement;
 
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "document_id")
   private DocumentEntity document;
