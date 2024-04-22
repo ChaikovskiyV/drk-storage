@@ -1,0 +1,32 @@
+package org.example.drkstorage.dto;
+
+import jakarta.validation.constraints.Pattern;
+import java.util.UUID;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Length;
+
+@Data
+@Accessors(chain = true)
+@NoArgsConstructor
+public class DocumentDto implements AbstractDto {
+  @Pattern(regexp = "\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}",
+      message = "The id should be like that: 46e0d4b4-ac93-ee4c-d13e-cc0f5048283d")
+  private UUID id;
+  @NonNull
+  @Length(min = 3, max = 100, message = "The length of the document name has to be from 3 to 100")
+  private String name;
+  @NonNull
+  @Length(min = 3, max = 50, message = "The length of the article has to be from 5 to 30")
+  private String article;
+  @NonNull
+  @Length(min = 5, max = 300, message = "The length of the description has to be from 5 to 300")
+  private String description;
+  private Long createdDate;
+  @Pattern(regexp = "\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}",
+      message = "The partOf should be like that: 46e0d4b4-ac93-ee4c-d13e-cc0f5048283d")
+  private UUID partOf;
+  //TO DO Add FileDto and RequirementDetailsDto
+}
